@@ -1,5 +1,6 @@
 
 import '@/styles/globals.css';
+import 'tailwindcss/tailwind.css'
 import type { AppProps } from 'next/app';
 import AppShell from '@/components/AppShell';
 import { Toaster } from 'react-hot-toast';
