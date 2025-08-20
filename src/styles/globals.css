@@ -3,11 +3,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Prevent iOS Safari bouncing */
 html {
-  /* Prevent iOS safari bouncing */
   position: fixed;
   height: 100%;
   overflow: hidden;
+  transition: background-color 200ms ease-in-out; /* Theme transition */
 }
 
 body {
@@ -18,26 +19,26 @@ body {
 }
 
 /* Better touch targets */
-button, a {
+button,
+a {
   min-height: 44px;
   min-width: 44px;
 }
 
-/* Smooth animations */
+/* Smooth transitions */
 * {
-  transition-property: color, background-color, border-color;
-  transition-duration: 150ms;
+  transition-property: background-color, border-color, color;
+  transition-duration: 200ms;
   transition-timing-function: ease-in-out;
 }
 
 /* Hide scrollbar but keep functionality */
 .hide-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none;    /* Firefox */
 }
-
 .hide-scrollbar::-webkit-scrollbar {
-  display: none;
+  display: none;            /* Chrome/Safari */
 }
 
 /* PWA safe areas */
@@ -46,3 +47,56 @@ button, a {
   padding-right: env(safe-area-inset-right);
 }
 
+/* Safe area for mobile devices */
+.pb-safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 1rem);
+}
+
+/* Custom scrollbar (use raw colors, since @apply doesn’t work here) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background-color: #f3f4f6; /* gray-100 */
+}
+.dark ::-webkit-scrollbar-track {
+  background-color: #1f2937; /* gray-800 */
+}
+::-webkit-scrollbar-thumb {
+  background-color: #d1d5db; /* gray-300 */
+  border-radius: 9999px;     /* rounded-full */
+}
+.dark ::-webkit-scrollbar-thumb {
+  background-color: #4b5563; /* gray-600 */
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #9ca3af; /* gray-400 */
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: #6b7280; /* gray-500 */
+}
+
+/* Backdrop blur fallback */
+@supports not (backdrop-filter: blur(12px)) {
+  .backdrop-blur-md {
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+  .dark .backdrop-blur-md {
+    background-color: rgba(17, 24, 39, 0.9);
+  }
+}
+
+/* Focus styles for better accessibility */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  @apply ring-2 ring-primary-500 ring-offset-2 dark:ring-offset-gray-900 outline-none;
+}
+
+/* Custom styles for datetime-local inputs */
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+.dark input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  filter: invert(0);
+}
