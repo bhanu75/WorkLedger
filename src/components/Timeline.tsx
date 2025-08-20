@@ -21,7 +21,7 @@ export default function Timeline({ sessions, onUpdateSession, onDeleteSession }:
 
   return (
     <div className="space-y-3">
-      <h3 className="text-lg font-semibold text-gray-900 mb-3">Today's Timeline</h3>
+      <h3 className="text-lg font-semibold text-gray-900 mb-3">Today&apos;s Timeline</h3>
       
       <AnimatePresence>
         {sessions.map((session) => (
