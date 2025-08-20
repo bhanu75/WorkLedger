@@ -45,32 +45,28 @@ export default function TodaySummary({ sessions, runningDuration }: TodaySummary
       value: formatDuration(stats.totalWork),
       icon: Clock,
       color: 'text-green-600 dark:text-green-400',
-      bgColor: 'bg-green-50 dark:bg-green-900/20',
-      borderColor: 'border-green-200 dark:border-green-800'
+      cssClass: 'summary-card-work'
     },
     {
       title: 'Net Productive',
       value: formatDuration(stats.netProductive),
       icon: TrendingUp,
       color: 'text-blue-600 dark:text-blue-400',
-      bgColor: 'bg-blue-50 dark:bg-blue-900/20',
-      borderColor: 'border-blue-200 dark:border-blue-800'
+      cssClass: 'summary-card-productive'
     },
     {
       title: 'Break Time',
       value: formatDuration(stats.breakTime),
       icon: Coffee,
       color: 'text-orange-600 dark:text-orange-400',
-      bgColor: 'bg-orange-50 dark:bg-orange-900/20',
-      borderColor: 'border-orange-200 dark:border-orange-800'
+      cssClass: 'summary-card-break'
     },
     {
       title: 'Tech Issues',
       value: stats.techIssues.toString(),
       icon: AlertTriangle,
       color: 'text-red-600 dark:text-red-400',
-      bgColor: 'bg-red-50 dark:bg-red-900/20',
-      borderColor: 'border-red-200 dark:border-red-800'
+      cssClass: 'summary-card-tech'
     }
   ];
 
@@ -78,7 +74,7 @@ export default function TodaySummary({ sessions, runningDuration }: TodaySummary
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6 transition-colors">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-          Today&apos;s Summary
+          Today's Summary
         </h2>
         
         {/* Productivity Score */}
@@ -98,15 +94,15 @@ export default function TodaySummary({ sessions, runningDuration }: TodaySummary
         )}
       </div>
 
-      {/* Summary Grid */}
+      {/* Summary Grid - Using new CSS classes */}
       <div className="grid grid-cols-2 gap-4">
         {summaryCards.map((card) => (
           <div
             key={card.title}
-            className={`p-4 rounded-xl border ${card.bgColor} ${card.borderColor} transition-all hover:shadow-md`}
+            className={`summary-card ${card.cssClass}`}
           >
             <div className="flex items-center justify-between mb-2">
-              <card.icon className={`${card.color}`} size={20} />
+              <card.icon className={card.color} size={20} />
               <div className={`text-2xl font-bold ${card.color}`}>
                 {card.value}
               </div>
