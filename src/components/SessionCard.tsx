@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Edit3, Trash2, Clock, MoreVertical, Save, X } from 'lucide-react';
 import { Session } from '@/lib/idb';
-import { formatDuration, formatTime } from '@/lib/timeUtils';
+import { formatDuration } from '@/lib/timeUtils';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface SessionCardProps {
@@ -9,6 +9,14 @@ interface SessionCardProps {
   onUpdate: (sessionId: string, updates: Partial<Session>) => void;
   onDelete: (sessionId: string) => void;
 }
+
+// Helper function to format time
+const formatTime = (timestamp: string) => {
+  return new Date(timestamp).toLocaleTimeString([], { 
+    hour: '2-digit', 
+    minute: '2-digit' 
+  });
+};
 
 // Activity type configs with better visibility
 const ACTIVITY_CONFIGS = {
