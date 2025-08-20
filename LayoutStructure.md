@@ -1,3 +1,4 @@
+'''bash
 time-tracker/
 ├── .gitignore
 ├── .eslintrc.json
@@ -34,4 +35,4 @@ time-tracker/
 │   └── settings.tsx
 └── styles/
 └── globals.css
-
+'''
