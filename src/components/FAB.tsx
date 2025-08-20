@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Play, Square, ChevronUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -19,6 +18,22 @@ export default function FAB({ isRunning, onStart, onStop }: FABProps) {
     { type: 'lunch' as const, label: 'Lunch', icon: '🍽️' },
     { type: 'tech' as const, label: 'Tech Issue', icon: '🔧' },
   ];
+
+  const handleFABClick = () => {
+    if (isRunning) {
+      onStop();
+    } else if (showQuickActions) {
+      setShowQuickActions(false);
+    } else {
+      onStart('work');
+    }
+  };
+
+  const handleFABDoubleClick = () => {
+    if (!isRunning) {
+      setShowQuickActions(!showQuickActions);
+    }
+  };
 
   return (
     <div className="fixed bottom-24 right-6 z-50">
@@ -56,20 +71,8 @@ export default function FAB({ isRunning, onStart, onStop }: FABProps) {
       <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        onClick={() => {
-          if (isRunning) {
-            onStop();
-          } else if (showQuickActions) {
-            setShowQuickActions(false);
-          } else {
-            onStart('work');
-          }
-        }}
-        onLongPress={() => {
-          if (!isRunning) {
-            setShowQuickActions(!showQuickActions);
-          }
-        }}
+        onClick={handleFABClick}
+        onDoubleClick={handleFABDoubleClick}
         className={`w-16 h-16 rounded-full shadow-lg flex items-center justify-center transition-all duration-200 ${
           isRunning 
             ? 'bg-red-500 hover:bg-red-600' 
