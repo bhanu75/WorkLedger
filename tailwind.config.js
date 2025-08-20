@@ -1,3 +1,5 @@
+
+/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -20,15 +22,15 @@ module.exports = {
           800: '#1e40af',
           900: '#1e3a8a',
           950: '#172554',
-        }
+        },
       },
       backdropBlur: {
-        'md': '12px'
+        md: '12px',
       },
       spacing: {
         'safe-bottom': 'env(safe-area-inset-bottom, 1rem)',
-      }
+      },
     },
   },
   plugins: [],
-}
+};
