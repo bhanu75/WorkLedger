@@ -43,7 +43,7 @@ export default function Timeline({ sessions, onUpdateSession, onDeleteSession }:
       <div className="flex items-center gap-2 mb-6">
         <Clock className="text-gray-600 dark:text-gray-400" size={20} />
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-          Today's Timeline
+          Today&apos;s Timeline
         </h3>
         <span className="text-sm text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full">
           {sessions.length} session{sessions.length !== 1 ? 's' : ''}
