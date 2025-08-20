@@ -700,7 +700,182 @@ textarea:focus {
     height: 56px;
   }
 }
+/* Add this to your globals.css file to force proper styling */
 
+
+/* Force card styling if Tailwind classes aren't applying */
+.bg-white, 
+[class*="bg-white"] {
+  background-color: #ffffff !important;
+}
+
+.rounded-lg,
+[class*="rounded-lg"] {
+  border-radius: 0.5rem !important;
+}
+
+.shadow-sm,
+[class*="shadow-sm"] {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+.border,
+[class*="border"] {
+  border-width: 1px !important;
+}
+
+.border-gray-200,
+[class*="border-gray-200"] {
+  border-color: #e5e7eb !important;
+}
+
+.p-4,
+[class*="p-4"] {
+  padding: 1rem !important;
+}
+
+.p-6,
+[class*="p-6"] {
+  padding: 1.5rem !important;
+}
+
+.mb-6,
+[class*="mb-6"] {
+  margin-bottom: 1.5rem !important;
+}
+
+.grid,
+[class*="grid"] {
+  display: grid !important;
+}
+
+.grid-cols-2,
+[class*="grid-cols-2"] {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+.gap-4,
+[class*="gap-4"] {
+  gap: 1rem !important;
+}
+
+/* Force text colors */
+.text-gray-900 {
+  color: #111827 !important;
+}
+
+.text-gray-600 {
+  color: #4b5563 !important;
+}
+
+.text-green-600 {
+  color: #059669 !important;
+}
+
+.text-blue-600 {
+  color: #2563eb !important;
+}
+
+.text-orange-600 {
+  color: #ea580c !important;
+}
+
+.text-red-600 {
+  color: #dc2626 !important;
+}
+
+/* Force background colors for summary cards */
+.bg-green-50 {
+  background-color: #f0fdf4 !important;
+}
+
+.bg-blue-50 {
+  background-color: #eff6ff !important;
+}
+
+.bg-orange-50 {
+  background-color: #fff7ed !important;
+}
+
+.bg-red-50 {
+  background-color: #fef2f2 !important;
+}
+
+/* Specific fixes for your components */
+.container {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Summary section styling */
+.summary-section {
+  background: white;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Timeline section styling */
+.timeline-section {
+  background: white;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Session card improvements */
+.session-item {
+  background: white;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid #e5e7eb;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.session-item:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Font weights and sizes */
+.font-bold {
+  font-weight: 700 !important;
+}
+
+.font-semibold {
+  font-weight: 600 !important;
+}
+
+.text-lg {
+  font-size: 1.125rem !important;
+}
+
+.text-xl {
+  font-size: 1.25rem !important;
+}
+
+.text-2xl {
+  font-size: 1.5rem !important;
+}
+
+.text-sm {
+  font-size: 0.875rem !important;
+}
+
+/* Ensure proper spacing */
+.space-y-4 > * + * {
+  margin-top: 1rem !important;
+}
+
+.space-y-6 > * + * {
+  margin-top: 1.5rem !important;
+}
 /* High contrast mode support */
 @media (prefers-contrast: high) {
   :root {
