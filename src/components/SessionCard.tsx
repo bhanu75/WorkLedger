@@ -110,8 +110,8 @@ export default function SessionCard({ session, onUpdate, onDelete }: SessionCard
   return (
     <motion.div 
       layout
-      className={`relative rounded-xl border p-4 ${config.cssClass}`}
-      >
+      className={`relative rounded-xl border p-4 ${config.bgColor} ${config.borderColor} transition-all duration-200`}
+    >
       {/* Timeline dot */}
       <div className="absolute left-0 top-6 w-1 h-8 rounded-full bg-gray-200 dark:bg-gray-700">
         <div className={`w-3 h-3 rounded-full ${config.dotColor} absolute -left-1 top-2`} />
