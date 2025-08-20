@@ -209,7 +209,7 @@ export default function SessionCard({ session, onUpdate, onDelete }: SessionCard
 
                 {session.note && (
                   <p className="text-sm text-gray-700 dark:text-gray-300 mt-2 italic">
-                    "{session.note}"
+                    &ldquo;{session.note}&rdquo;
                   </p>
                 )}
               </div>
