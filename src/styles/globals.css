@@ -1,170 +1,47 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* CSS Custom Properties for consistent theming */
-:root {
-  --primary-color: #3b82f6;
-  --success-color: #22c55e;
-  --danger-color: #ef4444;
-  --warning-color: #f97316;
-}
-
-.dark {
-  --primary-color: #60a5fa;
-  --success-color: #34d399;
-  --danger-color: #f87171;
-  --warning-color: #fbbf24;
-}
-
-/* Base styles */
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  transition: background-color 200ms ease, color 200ms ease;
-}
-
-/* Component layer - reusable patterns from your app */
-@layer components {
-  /* Activity type styles - extracted from your SessionCard */
-  .activity-work {
-    @apply bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800 text-green-800 dark:text-green-200;
-  }
-  
-  .activity-break {
-    @apply bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800 text-orange-800 dark:text-orange-200;
-  }
-  
-  .activity-lunch {
-    @apply bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-200;
-  }
-  
-  .activity-dinner {
-    @apply bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-800 text-purple-800 dark:text-purple-200;
-  }
-  
-  .activity-tech {
-    @apply bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-800 dark:text-red-200;
-  }
-
-  /* Summary card styles - from your TodaySummary component */
-  .summary-card {
-    @apply p-4 rounded-xl border transition-all hover:shadow-md;
-  }
-  
-  .summary-card-work {
-    @apply bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800;
-  }
-  
-  .summary-card-productive {
-    @apply bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800;
-  }
-  
-  .summary-card-break {
-    @apply bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800;
-  }
-  
-  .summary-card-tech {
-    @apply bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800;
-  }
-
-  /* Button patterns from your components */
-  .btn-fab {
-    @apply w-16 h-16 rounded-full shadow-xl flex items-center justify-center transition-all duration-300 relative overflow-hidden;
-  }
-  
-  .btn-option {
-    @apply flex items-center gap-3 bg-white dark:bg-gray-800 shadow-lg rounded-2xl px-4 py-3 border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-200 min-w-[200px] group;
-  }
-}
-
-/* Safe area handling for mobile */
-.pb-safe-bottom {
-  padding-bottom: calc(5rem + env(safe-area-inset-bottom));
-}
-
-.pt-safe-top {
-  padding-top: calc(1rem + env(safe-area-inset-top));
-}
-
-/* Fixed bottom navigation - addresses your layout issues */
-.bottom-nav-fixed {
+html {
+  /* Prevent iOS safari bouncing */
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 30;
-  background-color: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(12px);
-  border-top: 1px solid #e5e7eb;
-  padding: 0.5rem;
-  padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
+  height: 100%;
+  overflow: hidden;
 }
 
-.dark .bottom-nav-fixed {
-  background-color: rgba(17, 24, 39, 0.95);
-  border-top-color: #374151;
+body {
+  position: relative;
+  height: 100vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
-/* Header backdrop - fixes your header transparency */
-.header-backdrop {
-  background-color: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(12px);
+/* Better touch targets */
+button, a {
+  min-height: 44px;
+  min-width: 44px;
 }
 
-.dark .header-backdrop {
-  background-color: rgba(17, 24, 39, 0.8);
+/* Smooth animations */
+* {
+  transition-property: color, background-color, border-color;
+  transition-duration: 150ms;
+  transition-timing-function: ease-in-out;
 }
 
-/* Mobile optimizations */
-@media (max-width: 640px) {
-  .container {
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
-  }
-  
-  /* Fix touch targets - addresses mobile usability */
-  button,
-  [role="button"],
-  input[type="submit"],
-  input[type="button"] {
-    min-height: 44px;
-    min-width: 44px;
-  }
-  
-  /* Better spacing on mobile */
-  .summary-card {
-    padding: 0.75rem;
-  }
-  
-  .btn-fab {
-    width: 3.5rem;
-    height: 3.5rem;
-  }
+/* Hide scrollbar but keep functionality */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-/* Focus states for accessibility */
-button:focus-visible,
-input:focus-visible,
-a:focus-visible {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 2px;
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
-/* Backdrop blur fallback */
-@supports not (backdrop-filter: blur()) {
-  .header-backdrop {
-    background-color: rgba(255, 255, 255, 0.9);
-  }
-  
-  .dark .header-backdrop {
-    background-color: rgba(17, 24, 39, 0.9);
-  }
-  
-  .bottom-nav-fixed {
-    background-color: rgba(255, 255, 255, 0.95);
-  }
-  
-  .dark .bottom-nav-fixed {
-    background-color: rgba(17, 24, 39, 0.95);
-  }
+/* PWA safe areas */
+.safe-area-inset {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
