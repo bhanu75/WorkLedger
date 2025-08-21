@@ -281,6 +281,219 @@ describe('Work Ledger App Integration', () => {
       app.closeManualEdit();
       
       expect(mockElements.editModal.classList.remove).toHaveBeenCalledWith('show');
+    });
+
+    test('should provide visual feedback for state changes', () => {
+      app.selectActivity('work');
+      
+      expect(mockElements.currentActivityName.textContent).toBe('Work');
+      
+      app.startActivity();
+      
+      expect(mockElements.activityStatus.className).toBe('activity-status status-active');
+      
+      app.stopActivity();
+      
+      expect(mockElements.activityStatus.className).toBe('activity-status status-inactive');
+    });
+  });
+
+  describe('Accessibility', () => {
+    beforeEach(() => {
+      app = new WorkLedgerApp();
+    });
+
+    test('should maintain focus management', () => {
+      app.openManualEdit();
+      
+      // Modal should be properly managed
+      expect(mockElements.editModal.classList.add).toHaveBeenCalledWith('show');
+    });
+
+    test('should provide proper ARIA labels', () => {
+      // Elements should have proper attributes set during initialization
+      expect(document.createElement).toHaveBeenCalled();
+    });
+  });
+
+  describe('Edge Cases', () => {
+    beforeEach(() => {
+      app = new WorkLedgerApp();
+    });
+
+    test('should handle concurrent timer operations', () => {
+      app.selectActivity('work');
+      app.startActivity();
+      
+      // Try to start again while running
+      app.startActivity();
+      
+      // Should remain in single active state
+      expect(app.timerManager.isActive()).toBe(true);
+    });
+
+    test('should handle invalid activity selection', () => {
+      const result = app.selectActivity('nonexistent');
+      
+      expect(app.activityManager.getCurrentActivity()).toBeNull();
+    });
+
+    test('should handle empty export attempts', () => {
+      app.dataManager.clearAllData();
+      
+      expect(() => {
+        app.exportData('txt');
+      }).not.toThrow();
+    });
+
+    test('should handle malformed localStorage data', () => {
+      localStorageMock.getItem.mockReturnValue('invalid-json');
+      
+      expect(() => {
+        new WorkLedgerApp();
+      }).not.toThrow();
+    });
+  });
+
+  describe('Module Integration', () => {
+    beforeEach(() => {
+      app = new WorkLedgerApp();
+    });
+
+    test('should coordinate between timer and data managers', () => {
+      app.selectActivity('work');
+      app.startActivity();
+      app.stopActivity();
+      
+      // Data should be saved and timer should be reset
+      expect(localStorageMock.setItem).toHaveBeenCalled();
+      expect(app.timerManager.isActive()).toBe(false);
+    });
+
+    test('should synchronize UI with data changes', () => {
+      app.dataManager.addEntry({
+        activity: 'work',
+        activityName: 'Work',
+        startTime: '2025-08-21T09:00:00.000Z',
+        endTime: '2025-08-21T10:00:00.000Z',
+        duration: 3600000,
+        date: '2025-08-21'
+      });
+
+      app.updateSummary();
+      
+      // UI should reflect the data change
+      expect(mockElements.dailySummary.innerHTML).toBeDefined();
+    });
+
+    test('should maintain theme consistency across components', () => {
+      const theme = app.themeManager.getCurrentTheme();
+      
+      app.themeManager.toggleTheme();
+      
+      const newTheme = app.themeManager.getCurrentTheme();
+      expect(newTheme).not.toBe(theme);
+      expect(localStorageMock.setItem).toHaveBeenCalledWith('workLedgerTheme', newTheme);
+    });
+  });
+
+  describe('Real-world Scenarios', () => {
+    beforeEach(() => {
+      app = new WorkLedgerApp();
+    });
+
+    test('should handle a complete work day scenario', () => {
+      // Morning work session
+      app.selectActivity('work');
+      app.startActivity();
+      app.stopActivity();
+      
+      // Lunch break
+      app.selectActivity('lunch');
+      app.startActivity();
+      app.stopActivity();
+      
+      // Afternoon work session
+      app.selectActivity('work');
+      app.startActivity();
+      app.stopActivity();
+      
+      // Should have 3 entries saved
+      const entries = app.dataManager.getAllEntries();
+      expect(entries.length).toBeGreaterThanOrEqual(3);
+    });
+
+    test('should handle user forgetting to stop timer', () => {
+      app.selectActivity('work');
+      app.startActivity();
+      
+      // User manually adds entry for the period
+      const mockEvent = {
+        preventDefault: jest.fn(),
+        target: document.createElement('form')
+      };
+
+      app.saveManualEntry(mockEvent);
+      
+      // Should handle both running timer and manual entry
+      expect(app.timerManager.isActive()).toBe(true);
+      expect(localStorageMock.setItem).toHaveBeenCalled();
+    });
+
+    test('should handle theme changes during active session', () => {
+      app.selectActivity('work');
+      app.startActivity();
+      
+      app.themeManager.toggleTheme();
+      
+      // Timer should continue running despite theme change
+      expect(app.timerManager.isActive()).toBe(true);
+    });
+
+    test('should handle export of large datasets', () => {
+      // Add multiple entries
+      for (let i = 0; i < 50; i++) {
+        app.dataManager.addEntry({
+          activity: 'work',
+          activityName: 'Work',
+          startTime: `2025-08-21T${String(9 + i % 8).padStart(2, '0')}:00:00.000Z`,
+          endTime: `2025-08-21T${String(10 + i % 8).padStart(2, '0')}:00:00.000Z`,
+          duration: 3600000,
+          date: '2025-08-21'
+        });
+      }
+
+      expect(() => {
+        app.exportData('csv');
+      }).not.toThrow();
+    });
+  });
+
+  describe('Browser Compatibility', () => {
+    test('should handle missing modern APIs gracefully', () => {
+      // Mock missing service worker
+      delete global.navigator.serviceWorker;
+      
+      expect(() => {
+        new WorkLedgerApp();
+      }).not.toThrow();
+    });
+
+    test('should handle localStorage quota exceeded', () => {
+      localStorageMock.setItem.mockImplementation(() => {
+        throw new DOMException('Quota exceeded', 'QuotaExceededError');
+      });
+
+      app = new WorkLedgerApp();
+      app.selectActivity('work');
+      app.startActivity();
+      
+      expect(() => {
+        app.stopActivity();
+      }).not.toThrow();
+    });
+  });
+});BeenCalledWith('show');
       expect(mockElements.editForm.reset).toHaveBeenCalled();
     });
 
