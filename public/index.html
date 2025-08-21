@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work Ledger</title>
+    <meta name="description" content="Simple activity tracker for daily productivity">
+    <meta name="theme-color" content="#2563eb">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiV29yayBMZWRnZXIiLCJzaG9ydF9uYW1lIjoiV29ya0xlZGdlciIsImRlc2NyaXB0aW9uIjoiU2ltcGxlIGFjdGl2aXR5IHRyYWNrZXIgZm9yIGRhaWx5IHByb2R1Y3Rpdml0eSIsInN0YXJ0X3VybCI6Ii8iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjZmZmZmZmIiwidGhlbWVfY29sb3IiOiIjMjU2M2ViIiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjNhV1IwYUQwaU1UQXlOQ0lnYUdWcFoyaDBQU0l4TURJMElpQjJhV1YzUW05NFBTSXdJREFnTVRBeU5DQXhNREkwSWlCbWFXeHNQU0lqTWpVMk0yVmlJaUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lQanh5WldOMElIZzlJakU0TWlJZ2VUMGlNakEySWlCM2FXUjBhRDBpTmpZd0lpQm9aV2xuYUhROUlqUTJNQ0lnY25nOUlqRXlJaUJtYVd4c1BTSWpabVptSWk4K1BIQmhkR2dnWkQwaWJUUXpNaUF6TmpKak1UY3VOalFnTUNBek1pMHhOQzQySURReE5pMHpNaTQySWlCbWFXeHNQU0lqTWpVMk0yVmlJaTgrUEM5emRtYytJaUJwYzJsdVpUMGlNakExSWl3aWRIbHdaU0k2SWtGd2NHeHBZMkYwYVc5dUluMWRmUT09IiwidHlwZSI6ImltYWdlL3N2Zyt4bWwiLCJzaXplcyI6IjEwMjR4MTAyNCJ9XX0=">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 100%);
+            min-height: 100vh;
+            color: var(--gray-800);
+            line-height: 1.6;
+        }
+
+        .app-container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+        }
+
+        .app-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .app-subtitle {
+            color: var(--gray-500);
+            font-size: 0.9rem;
+        }
+
+        .status-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--gray-200);
+        }
+
+        .current-activity {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .activity-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--gray-800);
+            margin-bottom: 8px;
+        }
+
+        .activity-timer {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+            margin-bottom: 16px;
+        }
+
+        .activity-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-inactive {
+            background: var(--gray-100);
+            color: var(--gray-600);
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .control-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .btn {
+            padding: 16px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 56px;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-start {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-stop {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--gray-700);
+            border: 1px solid var(--gray-300);
+        }
+
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .activity-btn {
+            padding: 16px 12px;
+            background: white;
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--gray-700);
+        }
+
+        .activity-btn:hover {
+            border-color: var(--primary);
+            background: #eff6ff;
+        }
+
+        .activity-btn.active {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+
+        .activity-icon {
+            font-size: 1.5rem;
+            margin-bottom: 6px;
+        }
+
+        .summary-section {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--gray-200);
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--gray-800);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-name {
+            font-weight: 500;
+            color: var(--gray-700);
+        }
+
+        .summary-time {
+            font-weight: 600;
+            color: var(--primary);
+            font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+        }
+
+        .export-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .btn-export {
+            background: var(--gray-800);
+            color: white;
+            padding: 12px;
+            font-size: 0.9rem;
+        }
+
+        /* Dark Mode Variables */
+        [data-theme="dark"] {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --gray-50: #111827;
+            --gray-100: #1f2937;
+            --gray-200: #374151;
+            --gray-300: #4b5563;
+            --gray-400: #6b7280;
+            --gray-500: #9ca3af;
+            --gray-600: #d1d5db;
+            --gray-700: #e5e7eb;
+            --gray-800: #f3f4f6;
+            --gray-900: #ffffff;
+        }
+
+        [data-theme="dark"] body {
+            background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 100%);
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            border: none;
+            border-radius: 50%;
+            background: white;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.2s ease;
+        }
+
+        [data-theme="dark"] .theme-toggle {
+            background: var(--gray-200);
+            color: var(--gray-900);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: var(--shadow-lg);
+        }
+
+        [data-theme="dark"] .modal-content {
+            background: var(--gray-100);
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--gray-800);
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: var(--gray-700);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--gray-300);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: white;
+            color: var(--gray-800);
+        }
+
+        [data-theme="dark"] .form-input {
+            background: var(--gray-200);
+            border-color: var(--gray-300);
+            color: var(--gray-800);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .btn-cancel {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray-500);
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 480px) {
+            .app-container {
+                padding: 16px;
+            }
+            
+            .activity-timer {
+                font-size: 2rem;
+            }
+            
+            .activities-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+            🌙
+        </button>
+
+        <header class="header">
+            <h1 class="app-title">Work Ledger</h1>
+            <p class="app-subtitle">Track your daily activities effortlessly</p>
+        </header>
+
+        <!-- Current Activity Status -->
+        <div class="status-card">
+            <div class="current-activity">
+                <div class="activity-name" id="currentActivityName">No Activity</div>
+                <div class="activity-timer" id="activityTimer">00:00:00</div>
+                <div class="activity-status" id="activityStatus">
+                    <span class="status-dot"></span>
+                    <span>Inactive</span>
+                </div>
+            </div>
+
+            <div class="control-buttons">
+                <button class="btn btn-start" id="startBtn">
+                    ▶️ Start
+                </button>
+                <button class="btn btn-stop" id="stopBtn" disabled>
+                    ⏹️ Stop
+                </button>
+            </div>
+        </div>
+
+        <!-- Activity Selection -->
+        <div class="summary-section">
+            <div class="section-title">
+                📋 Select Activity
+            </div>
+            <div class="activities-grid" id="activitiesGrid">
+                <!-- Activities will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Daily Summary -->
+        <div class="summary-section">
+            <div class="section-title">
+                📊 Today's Summary
+            </div>
+            <div id="dailySummary">
+                <div class="empty-state">
+                    <div class="empty-icon">⏰</div>
+                    <p>No activities tracked today</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Export Options -->
+        <div class="summary-section">
+            <div class="section-title">
+                📤 Export Data
+            </div>
+            <div class="export-buttons">
+                <button class="btn btn-export" id="exportTxt">
+                    💬 Export TXT
+                </button>
+                <button class="btn btn-export" id="exportCsv">
+                    📊 Export CSV
+                </button>
+            </div>
+            <button class="btn btn-secondary" id="manualEditBtn" style="width: 100%; margin-top: 12px;">
+                ✏️ Manual Edit
+            </button>
+        </div>
+    </div>
+
+    <!-- Manual Edit Modal -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-title">Manual Time Edit</div>
+            <form id="editForm">
+                <div class="form-group">
+                    <label class="form-label">Activity</label>
+                    <select class="form-input" id="editActivity" required>
+                        <option value="">Select Activity</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Date</label>
+                    <input type="date" class="form-input" id="editDate" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Start Time</label>
+                    <input type="time" class="form-input" id="editStartTime" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">End Time</label>
+                    <input type="time" class="form-input" id="editEndTime" required>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn btn-cancel" id="cancelEdit">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Core Application Class - Modular Architecture
+        class WorkLedger {
+            constructor() {
+                this.activities = [
+                    { id: 'work', name: 'Work', icon: '💼' },
+                    { id: 'lunch', name: 'Lunch', icon: '🍽️' },
+                    { id: 'tea', name: 'Tea', icon: '☕' },
+                    { id: 'dinner', name: 'Dinner', icon: '🍛' },
+                    { id: 'break', name: 'Break', icon: '☕' },
+                    { id: 'sleep', name: 'Sleep', icon: '😴' }
+                ];
+                
+                this.currentActivity = null;
+                this.startTime = null;
+                this.timerInterval = null;
+                this.entries = this.loadData();
+                
+                this.initializeUI();
+                this.bindEvents();
+                this.updateDisplay();
+            }
+
+            // Data Management Module
+            loadData() {
+                try {
+                    const data = localStorage.getItem('workLedgerEntries');
+                    return data ? JSON.parse(data) : [];
+                } catch (error) {
+                    console.error('Error loading data:', error);
+                    return [];
+                }
+            }
+
+            saveData() {
+                try {
+                    localStorage.setItem('workLedgerEntries', JSON.stringify(this.entries));
+                } catch (error) {
+                    console.error('Error saving data:', error);
+                }
+            }
+
+            // Theme Management Module
+            initializeTheme() {
+                const savedTheme = localStorage.getItem('workLedgerTheme') || 'light';
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                this.updateThemeToggle(savedTheme);
+            }
+
+            toggleTheme() {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('workLedgerTheme', newTheme);
+                this.updateThemeToggle(newTheme);
+            }
+
+            updateThemeToggle(theme) {
+                const toggle = document.getElementById('themeToggle');
+                toggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+            }
+
+            // UI Initialization Module
+            initializeUI() {
+                this.initializeTheme();
+                this.renderActivities();
+                this.populateEditActivityOptions();
+                this.updateSummary();
+                
+                // Set default date for manual edit
+                document.getElementById('editDate').valueAsDate = new Date();
+            }
+
+            renderActivities() {
+                const grid = document.getElementById('activitiesGrid');
+                grid.innerHTML = this.activities.map(activity => `
+                    <button class="activity-btn" data-activity="${activity.id}">
+                        <div class="activity-icon">${activity.icon}</div>
+                        <div>${activity.name}</div>
+                    </button>
+                `).join('');
+            }
+
+            populateEditActivityOptions() {
+                const select = document.getElementById('editActivity');
+                select.innerHTML = '<option value="">Select Activity</option>' +
+                    this.activities.map(activity => 
+                        `<option value="${activity.id}">${activity.name}</option>`
+                    ).join('');
+            }
+
+            // Event Binding Module
+            bindEvents() {
+                // Theme toggle
+                document.getElementById('themeToggle').addEventListener('click', () => this.toggleTheme());
+
+                // Activity selection
+                document.getElementById('activitiesGrid').addEventListener('click', (e) => {
+                    if (e.target.closest('.activity-btn')) {
+                        const activityId = e.target.closest('.activity-btn').dataset.activity;
+                        this.selectActivity(activityId);
+                    }
+                });
+
+                // Control buttons
+                document.getElementById('startBtn').addEventListener('click', () => this.startActivity());
+                document.getElementById('stopBtn').addEventListener('click', () => this.stopActivity());
+
+                // Export buttons
+                document.getElementById('exportTxt').addEventListener('click', () => this.exportData('txt'));
+                document.getElementById('exportCsv').addEventListener('click', () => this.exportData('csv'));
+
+                // Manual edit
+                document.getElementById('manualEditBtn').addEventListener('click', () => this.openEditModal());
+                document.getElementById('cancelEdit').addEventListener('click', () => this.closeEditModal());
+                document.getElementById('editForm').addEventListener('submit', (e) => this.saveManualEntry(e));
+
+                // Close modal on backdrop click
+                document.getElementById('editModal').addEventListener('click', (e) => {
+                    if (e.target === e.currentTarget) this.closeEditModal();
+                });
+            }
+
+            // Activity Management Module
+            selectActivity(activityId) {
+                // Update UI
+                document.querySelectorAll('.activity-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.activity === activityId);
+                });
+
+                const activity = this.activities.find(a => a.id === activityId);
+                if (activity) {
+                    this.currentActivity = activity;
+                    document.getElementById('currentActivityName').textContent = activity.name;
+                    document.getElementById('startBtn').disabled = false;
+                }
+            }
+
+            startActivity() {
+                if (!this.currentActivity) return;
+
+                this.startTime = new Date();
+                document.getElementById('startBtn').disabled = true;
+                document.getElementById('stopBtn').disabled = false;
+                
+                const statusEl = document.getElementById('activityStatus');
+                statusEl.className = 'activity-status status-active';
+                statusEl.innerHTML = '<span class="status-dot"></span><span>Active</span>';
+
+                this.startTimer();
+            }
+
+            stopActivity() {
+                if (!this.currentActivity || !this.startTime) return;
+
+                const endTime = new Date();
+                const duration = endTime - this.startTime;
+
+                // Save entry
+                this.entries.push({
+                    id: Date.now(),
+                    activity: this.currentActivity.id,
+                    activityName: this.currentActivity.name,
+                    startTime: this.startTime.toISOString(),
+                    endTime: endTime.toISOString(),
+                    duration: duration,
+                    date: this.formatDate(this.startTime)
+                });
+
+                this.saveData();
+                this.resetActivity();
+                this.updateSummary();
+            }
+
+            resetActivity() {
+                this.currentActivity = null;
+                this.startTime = null;
+                
+                if (this.timerInterval) {
+                    clearInterval(this.timerInterval);
+                    this.timerInterval = null;
+                }
+
+                // Reset UI
+                document.getElementById('currentActivityName').textContent = 'No Activity';
+                document.getElementById('activityTimer').textContent = '00:00:00';
+                document.getElementById('startBtn').disabled = true;
+                document.getElementById('stopBtn').disabled = true;
+                
+                const statusEl = document.getElementById('activityStatus');
+                statusEl.className = 'activity-status status-inactive';
+                statusEl.innerHTML = '<span class="status-dot"></span><span>Inactive</span>';
+
+                document.querySelectorAll('.activity-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+            }
+
+            // Timer Module
+            startTimer() {
+                this.updateTimer();
+                this.timerInterval = setInterval(() => this.updateTimer(), 1000);
+            }
+
+            updateTimer() {
+                if (!this.startTime) return;
+                
+                const elapsed = new Date() - this.startTime;
+                const formatted = this.formatDuration(elapsed);
+                document.getElementById('activityTimer').textContent = formatted;
+            }
+
+            // Utility Functions Module
+            formatDuration(ms) {
+                const seconds = Math.floor(ms / 1000);
+                const hours = Math.floor(seconds / 3600);
+                const minutes = Math.floor((seconds % 3600) / 60);
+                const remainingSeconds = seconds % 60;
+
+                return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+            }
+
+            formatDate(date) {
+                return new Date(date).toISOString().split('T')[0];
+            }
+
+            formatTime(date) {
+                return new Date(date).toLocaleTimeString('en-US', {
+                    hour12: false,
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            }
+
+            // Summary Module
+            updateSummary() {
+                const today = this.formatDate(new Date());
+                const todayEntries = this.entries.filter(entry => entry.date === today);
+
+                if (todayEntries.length === 0) {
+                    document.getElementById('dailySummary').innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">⏰</div>
+                            <p>No activities tracked today</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const summary = this.activities.reduce((acc, activity) => {
+                    const activityEntries = todayEntries.filter(entry => entry.activity === activity.id);
+                    const totalDuration = activityEntries.reduce((sum, entry) => sum + entry.duration, 0);
+                    
+                    if (totalDuration > 0) {
+                        acc[activity.id] = {
+                            name: activity.name,
+                            icon: activity.icon,
+                            duration: totalDuration
+                        };
+                    }
+                    return acc;
+                }, {});
+
+                const summaryHTML = Object.values(summary).map(item => `
+                    <div class="summary-item">
+                        <span class="summary-name">${item.icon} ${item.name}</span>
+                        <span class="summary-time">${this.formatDuration(item.duration)}</span>
+                    </div>
+                `).join('');
+
+                document.getElementById('dailySummary').innerHTML = summaryHTML;
+            }
+
+            updateDisplay() {
+                this.updateSummary();
+            }
+
+            // Modal Management Module
+            openEditModal() {
+                document.getElementById('editModal').classList.add('show');
+            }
+
+            closeEditModal() {
+                document.getElementById('editModal').classList.remove('show');
+                document.getElementById('editForm').reset();
+            }
+
+            saveManualEntry(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(e.target);
+                const activityId = document.getElementById('editActivity').value;
+                const date = document.getElementById('editDate').value;
+                const startTime = document.getElementById('editStartTime').value;
+                const endTime = document.getElementById('editEndTime').value;
+
+                const activity = this.activities.find(a => a.id === activityId);
+                if (!activity) return;
+
+                const startDateTime = new Date(`${date}T${startTime}`);
+                const endDateTime = new Date(`${date}T${endTime}`);
+                const duration = endDateTime - startDateTime;
+
+                if (duration <= 0) {
+                    alert('End time must be after start time');
+                    return;
+                }
+
+                this.entries.push({
+                    id: Date.now(),
+                    activity: activityId,
+                    activityName: activity.name,
+                    startTime: startDateTime.toISOString(),
+                    endTime: endDateTime.toISOString(),
+                    duration: duration,
+                    date: this.formatDate(startDateTime)
+                });
+
+                this.saveData();
+                this.updateSummary();
+                this.closeEditModal();
+            }
+
+            // Export Module
+            exportData(format) {
+                const today = this.formatDate(new Date());
+                const todayEntries = this.entries.filter(entry => entry.date === today);
+
+                if (todayEntries.length === 0) {
+                    alert('No data to export for today');
+                    return;
+                }
+
+                if (format === 'txt') {
+                    this.exportTXT(todayEntries);
+                } else if (format === 'csv') {
+                    this.exportCSV(todayEntries);
+                }
+            }
+
+            exportTXT(entries) {
+                const today = new Date().toLocaleDateString();
+                let content = `Work Ledger - ${today}\n`;
+                content += '='.repeat(30) + '\n\n';
+
+                entries.forEach(entry => {
+                    content += `${entry.activityName}: ${this.formatTime(entry.startTime)} - ${this.formatTime(entry.endTime)} (${this.formatDuration(entry.duration)})\n`;
+                });
+
+                const totalTime = entries.reduce((sum, entry) => sum + entry.duration, 0);
+                content += `\nTotal Time: ${this.formatDuration(totalTime)}`;
+
+                this.downloadFile(content, `work-ledger-${today.replace(/\//g, '-')}.txt`, 'text/plain');
+            }
+
+            exportCSV(entries) {
+                const headers = ['Activity', 'Start Time', 'End Time', 'Duration (HH:MM:SS)', 'Date'];
+                const csvContent = [
+                    headers.join(','),
+                    ...entries.map(entry => [
+                        entry.activityName,
+                        this.formatTime(entry.startTime),
+                        this.formatTime(entry.endTime),
+                        this.formatDuration(entry.duration),
+                        entry.date
+                    ].join(','))
+                ].join('\n');
+
+                const today = new Date().toLocaleDateString().replace(/\//g, '-');
+                this.downloadFile(csvContent, `work-ledger-${today}.csv`, 'text/csv');
+            }
+
+            downloadFile(content, filename, mimeType) {
+                const blob = new Blob([content], { type: mimeType });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', () => {
+            new WorkLedger();
+        });
+
+        // Service Worker Registration for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => console.log('SW registered'))
+                    .catch(registrationError => console.log('SW registration failed'));
+            });
+        }
+    </script>
+</body>
+</html>
