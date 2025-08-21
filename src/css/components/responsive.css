@@ -1,0 +1,207 @@
+/* Responsive Design */
+
+/* Mobile First Approach */
+@media (max-width: 480px) {
+  .app-container {
+    padding: var(--space-4);
+  }
+  
+  .header {
+    margin-bottom: var(--space-6);
+    padding: var(--space-4) 0;
+  }
+  
+  .app-title {
+    font-size: var(--text-3xl);
+  }
+  
+  .activity-timer {
+    font-size: 2.5rem;
+  }
+  
+  .activities-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2);
+  }
+  
+  .activity-btn {
+    padding: var(--space-3) var(--space-2);
+    font-size: var(--text-xs);
+  }
+  
+  .activity-icon {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-1);
+  }
+  
+  .control-buttons {
+    gap: var(--space-2);
+  }
+  
+  .btn {
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-sm);
+    min-height: 48px;
+  }
+  
+  .status-card,
+  .summary-section {
+    padding: var(--space-4);
+    margin-bottom: var(--space-4);
+  }
+  
+  .export-buttons {
+    gap: var(--space-2);
+  }
+  
+  .theme-toggle {
+    top: var(--space-4);
+    right: var(--space-4);
+    width: 40px;
+    height: 40px;
+    font-size: var(--text-lg);
+  }
+  
+  .modal-content {
+    margin: var(--space-4);
+    padding: var(--space-4);
+  }
+  
+  .notification {
+    top: var(--space-4);
+    right: var(--space-4);
+    left: var(--space-4);
+    max-width: none;
+  }
+}
+
+/* Tablet Styles */
+@media (min-width: 481px) and (max-width: 768px) {
+  .activities-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .export-buttons {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop Styles */
+@media (min-width: 769px) {
+  .app-container {
+    padding: var(--space-8);
+  }
+  
+  .activities-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .control-buttons {
+    max-width: 300px;
+    margin: 0 auto var(--space-6);
+  }
+  
+  .export-buttons {
+    max-width: 300px;
+    margin: 0 auto var(--space-6);
+  }
+}
+
+/* Landscape Orientation */
+@media (orientation: landscape) and (max-height: 600px) {
+  .app-container {
+    padding: var(--space-3);
+  }
+  
+  .header {
+    margin-bottom: var(--space-4);
+    padding: var(--space-2) 0;
+  }
+  
+  .app-title {
+    font-size: var(--text-2xl);
+  }
+  
+  .activity-timer {
+    font-size: 2rem;
+  }
+  
+  .status-card,
+  .summary-section {
+    padding: var(--space-4);
+    margin-bottom: var(--space-3);
+  }
+}
+
+/* High DPI Displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .activity-icon {
+    image-rendering: -webkit-optimize-contrast;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .btn:hover {
+    transform: none;
+  }
+  
+  .activity-btn:hover {
+    transform: none;
+  }
+  
+  .card:hover {
+    transform: none;
+  }
+}
+
+/* Dark Mode Media Query */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    /* Auto dark mode when no theme is set */
+    --primary: #3b82f6;
+    --gray-50: #111827;
+    --gray-100: #1f2937;
+    --gray-800: #f3f4f6;
+    --gray-900: #ffffff;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .theme-toggle,
+  .control-buttons,
+  .export-buttons,
+  .modal {
+    display: none !important;
+  }
+  
+  .app-container {
+    max-width: none;
+    padding: 0;
+  }
+  
+  .status-card,
+  .summary-section {
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+  
+  .activity-timer {
+    color: #000;
+  }
+}btn {
+  background: var(--white);
+  border-color: var(--gray-200);
+  color: var(--gray-700);
+}
+
+[data-theme="light"] .activity-
