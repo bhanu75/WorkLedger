@@ -16,13 +16,13 @@
         "Service-Worker-Allowed": "/"
       }
     }
-    // ... baki routes same
+  
   ],
   "headers": [
-    // ... same headers
+  
   ],
   "redirects": [
-    // ... same redirects
+  
   ],
   "rewrites": [
     {
