@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://work-ledger.vercel.app/sitemap.xml
+
+# Performance optimization
+Crawl-delay: 1
